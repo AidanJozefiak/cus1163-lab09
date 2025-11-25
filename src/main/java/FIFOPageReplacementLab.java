@@ -54,7 +54,22 @@ public class FIFOPageReplacementLab {
         //         // Add new page
         //     }
         // }
-
+        Queue<Integer> queue = new LinkedList<>();
+        Set<Integer> pagesInMemory = new HashSet<>();
+        
+        for (int page: referenceString) {
+          if (pagesInMemory.contains(page)) {
+            pageHits++;
+          } else {
+            pageFaults++;
+            if (queue.size() == numFrames) {
+              int victim = queue.poll();
+              pagesInMemory.remove(victim);
+            }
+            queue.add(page);
+            pagesInMemory.add(page);
+          }
+        }
         return new int[]{pageFaults, pageHits};
     }
 
